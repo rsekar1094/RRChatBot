@@ -1,0 +1,15 @@
+{
+  "originHash" : "3084e54380f53f4152f4cd84fc7a0e8c8c2d3ecd34220bd1520f8bfaa5c57655",
+  "pins" : [
+    {
+      "identity" : "rrappframeworks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rsekar1094/RRAppFrameworks.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "885ea8b1ca4e428ec0cde8c0cc93b7a7d8e75671"
+      }
+    }
+  ],
+  "version" : 3
+}

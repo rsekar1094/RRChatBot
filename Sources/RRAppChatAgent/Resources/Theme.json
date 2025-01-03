@@ -1,0 +1,20 @@
+[
+   {
+      "font":{
+         "headline":{
+            "type":"bold",
+            "size":32
+         },
+         "body":{
+            "type":"regular",
+            "size":16
+         }
+      },
+      "color":{
+         "primary":"#FDFDFD",
+         "secondary":"#DDFFDD",
+         "error":"#DDDDDD"
+      },
+      "type":"whatsapp"
+   }
+]
