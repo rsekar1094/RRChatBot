@@ -15,7 +15,8 @@ let package = Package(
             targets: ["RRAppChatAgent"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/rsekar1094/RRAppFrameworks.git", branch: "main")
+        .package(url: "https://github.com/rsekar1094/RRAppFrameworks.git", branch: "main"),
+        .package(url: "https://github.com/rsekar1094/RRMediaView.git", branch: "main")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,7 +27,8 @@ let package = Package(
                 .product(name: "RRAppNetwork", package: "RRAppFrameworks"),
                 .product(name: "RRAppTheme", package: "RRAppFrameworks"),
                 .product(name: "RRAppUtils", package: "RRAppFrameworks"),
-                .product(name: "RRAppExtension", package: "RRAppFrameworks")
+                .product(name: "RRAppExtension", package: "RRAppFrameworks"),
+                .product(name: "RRMediaView", package: "RRMediaView")
             ],
             resources: [
                 .process("Resources")

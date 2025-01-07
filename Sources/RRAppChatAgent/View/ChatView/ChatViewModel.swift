@@ -14,7 +14,7 @@ import os
 public class ChatViewModel: ObservableObject {
     
     let chatRepository: ChatRepository
-    var threadId: String?
+    var input: Input
     
     @Published
     var messages: [ChatMessageViewModel] = []
@@ -23,10 +23,7 @@ public class ChatViewModel: ObservableObject {
     var messageInput: ChatMessageInputViewModel = .init()
     
     var viewState: ViewState = .idle
-    
-    @Inject
-    var config: ChatConfiguration
-    
+
     let logger = Logger(subsystem: "RRAppChatAgent.ChatViewModel", category: "ViewModel")
     
     public convenience init(input: Input) {
@@ -40,13 +37,13 @@ public class ChatViewModel: ObservableObject {
     
     init(input: Input, chatRepository: ChatRepository) {
         self.chatRepository = chatRepository
-        self.threadId = input.threadId
+        self.input = input
     }
 }
 
 public extension ChatViewModel {
     func fetchAllInitialMessages() async {
-        guard let threadId else { return }
+        guard let threadId = input.threadId else { return }
         self.viewState = .fetching
         
         do {
@@ -71,9 +68,9 @@ public extension ChatViewModel {
         messageInput.message = ""
         
         do {
-            if let threadId {
+            if let threadId = input.threadId {
                 _ = try await chatRepository.appendUserMessage(into: threadId, message: message)
-                try await chatRepository.runAndListen(to: threadId, assistantId: config.assistantId) { [weak self] data in
+                try await chatRepository.runAndListen(to: threadId, assistantId: input.assistantId) { [weak self] data in
                     guard let self else { return }
                     Task { @MainActor in
                         self.listenForRun(data: data)
@@ -81,7 +78,7 @@ public extension ChatViewModel {
                 }
             } else {
                 try await chatRepository.createAndRunThenListen(
-                    assistantId: config.assistantId,
+                    assistantId: input.assistantId,
                     userMessage: message
                 ) { [weak self] data in
                     guard let self else { return }
@@ -116,10 +113,10 @@ public extension ChatViewModel {
         switch data.event {
         case .thread:
             self.appendMessageLoaderIfNot("Processing")
-            self.threadId = data.meta?.id
+            input.threadId = data.meta?.id
         case .threadCreated:
             self.appendMessageLoaderIfNot("Processing")
-            self.threadId = data.meta?.threadId
+            input.threadId = data.meta?.threadId
         case .threadMessageDelta:
             self.removeMessageLoader()
             if let id = self.messages.firstIndex { $0.id == data.meta?.id } {
@@ -173,10 +170,12 @@ public extension ChatViewModel {
 
 public extension ChatViewModel {
     struct Input {
-        let threadId: String?
+        var threadId: String?
+        let assistantId: String
         
-        public init(threadId: String?) {
+        public init(threadId: String?, assistantId: String) {
             self.threadId = threadId
+            self.assistantId = assistantId
         }
     }
 }

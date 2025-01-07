@@ -9,6 +9,7 @@ public struct RRAppChatAgent {
     public static func load() {
         loadTheme()
         loadNetworkManager()
+        Resolver.shared.add(ThreadsRepositoryImpl(), key: String(reflecting: ThreadsRepository.self))
     }
 }
 
@@ -27,7 +28,6 @@ private extension RRAppChatAgent {
     static func loadNetworkManager() {
         let config = ChatConfigurationImpl()
         Resolver.shared.add(config, key: String(reflecting: Config.self)) // For Base Network
-        Resolver.shared.add(config, key: String(reflecting: ChatConfiguration.self)) // For chat related
         
         Resolver.shared.add(URLSessionNetworkManager(),key: String(reflecting: NetworkService.self))
     }

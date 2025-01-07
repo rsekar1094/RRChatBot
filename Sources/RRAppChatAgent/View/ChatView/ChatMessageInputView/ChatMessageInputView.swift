@@ -10,11 +10,11 @@ import SwiftUI
 import RRAppTheme
 import RRAppUtils
 
-@Observable
-class ChatMessageInputViewModel {
-    var message: String = ""
+class ChatMessageInputViewModel: ObservableObject {
+    @Published var message: String = ""
+    @Published var isReadyToSend: Bool = true
+    
     var isValid: Bool { !message.isEmpty }
-    var isReadyToSend: Bool = true
 }
 
 struct ChatMessageInputView: View {
@@ -22,7 +22,7 @@ struct ChatMessageInputView: View {
     @Inject
     var theme: Theme
    
-    @State
+    @ObservedObject
     var viewModel: ChatMessageInputViewModel
     
     let sendCompletion: (() -> Void)
@@ -45,6 +45,8 @@ struct ChatMessageInputView: View {
                         .foregroundStyle(Color.red)
                 }
             )
+            .disabled(!viewModel.isValid)
+            .opacity(viewModel.isValid ? 1 : 0.2)
            
         }
     }

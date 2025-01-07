@@ -57,3 +57,17 @@ extension NetworkPath {
         }
     }
 }
+
+// MARK: - NetworkPath + Assistant
+extension NetworkPath {
+    enum Assistant {
+        case listAll
+        
+        var path: String {
+            switch self {
+            case .listAll:
+                return "v1/assistants"
+            }
+        }
+    }
+}

@@ -11,14 +11,12 @@ import RRAppTheme
 import RRAppUtils
 import SwiftUI
 
-public struct ChatView: View {
+struct ChatView: View {
     
-    @StateObject
-    private var viewModel = ChatViewModel(input: .init(threadId: "thread_PgcUZ5qTqE73GiQS2MxZkbY7"))
+    @ObservedObject
+    var viewModel: ChatViewModel
     
-    public init() {}
-    
-    public var body: some View {
+    var body: some View {
         VStack {
             messageListView
             
@@ -28,7 +26,7 @@ public struct ChatView: View {
                 }
             }
         }
-        .task {
+        .task(id: viewModel.input.threadId) {
             await viewModel.fetchAllInitialMessages()
         }
     }
