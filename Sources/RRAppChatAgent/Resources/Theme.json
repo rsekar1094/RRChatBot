@@ -1,136 +1,763 @@
 [
-   {
-      "font":{
-         "headline":{
-            "type":"bold",
-            "size":32
-         },
-         "body":{
-            "type":"regular",
-            "size":16
-         },
-         "chat": {
-             "message": {
-                 "type":"regular",
-                 "size":16
-             },
-             "info": {
-                 "type":"regular",
-                 "size":12
-             },
-             "messageInput" : {
-                 "placeholder": {
-                     "type":"regular",
-                     "size":14
-                 },
-                 "text": {
-                     "type":"regular",
-                     "size":16
-                 }
-             }
-         },
-         "thread": {
-             "primary": {
-                 "type":"bold",
-                 "size":14
-             },
-             "secondary": {
-                 "type":"regular",
-                 "size":12
-             },
-             "info": {
-                 "type":"regular",
-                 "size":12
-             }
-         },
-         "agent": {
-             "primary": {
-                 "type":"bold",
-                 "size":12
-             }
-         }
-      },
-      "color":{
-         "primary": "#625EEA",
-         "secondary":"#DDFFDD",
-         "error":"#DDDDDD",
-         "chat": {
-             "user": {
-                 "background": {
-                     "light": "#625EEA",
-                     "dark": "#625EEA",
-                 },
-                 "text": {
-                     "light": "#FFFFFF",
-                     "dark": "#FFFFFF"
-                 }
-             },
-             "agent": {
-                 "background": {
-                     "light": "#E9EBF9",
-                     "dark": "#E9EBF9",
-                 },
-                 "text": {
-                     "light": "#010405",
-                     "dark": "#010405",
-                 }
-             },
-             "background": {
-                 "light": "#F7FAFB",
-                 "dark": "#19181B",
-             },
-             "textInput": {
-                 "background":  "#E9EBF9",
-                 "placeholder": "#606062",
-                 "text": "#000000"
-             }
-         },
-         "thread": {
-             "selected" : {
-                 "background": {
-                     "light": "#E9EBF9",
-                     "dark": "#E9EBF9",
-                 },
-                 "primaryText": "#000000",
-                 "secondaryText": "#606062",
-                 "infoText": "#797979"
-             },
-             "unSelected" : {
-                 "background": {
-                     "light": "#F7FAFB",
-                     "dark": "#19181B",
-                 },
-                 "primaryText": {
-                     "light": "#000000",
-                     "dark": "#FFFFFF",
-                 },
-                 "secondaryText": {
-                     "light": "#606062",
-                     "dark": "#FFFFFF",
-                 },
-                 "infoText": {
-                     "light": "#797979",
-                     "dark": "#FFFFFF",
-                 }
-             }
-         },
-         "agent": {
-             "unselected": {
-                 "background":{
-                     "light": "#F7FAFB",
-                     "dark": "#19181B",
-                 },
-                 "text": {
-                     "light": "#000000",
-                     "dark": "#FFFFFF",
-                 }
-             },
-             "selected": {
-                 "background": "#E9EBF9",
-                 "text": "#000000"
-             }
-         }
-      },
-      "type":"whatsapp"
-   }
+    {
+        "type": "whatsapp",
+        "font": {
+            "headline": {
+                "type": "bold",
+                "size": 32
+            },
+            "body": {
+                "type": "regular",
+                "size": 16
+            },
+            "chat": {
+                "message": {
+                    "type": "regular",
+                    "size": 16
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "messageInput": {
+                    "placeholder": {
+                        "type": "regular",
+                        "size": 14
+                    },
+                    "text": {
+                        "type": "regular",
+                        "size": 16
+                    }
+                }
+            },
+            "thread": {
+                "primary": {
+                    "type": "bold",
+                    "size": 14
+                },
+                "secondary": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                }
+            },
+            "agent": {
+                "primary": {
+                    "type": "bold",
+                    "size": 12
+                }
+            }
+        },
+        "color": {
+            "primary": {
+                "light": "#25D366",
+                "dark": "#128C7E"
+            },
+            "secondary": {
+                "light": "#DCF8C6",
+                "dark": "#075E54"
+            },
+            "error": {
+                "light": "#FF5252",
+                "dark": "#FF7373"
+            },
+            "chat": {
+                "user": {
+                    "background": {
+                        "light": "#25D366",
+                        "dark": "#128C7E"
+                    },
+                    "text": {
+                        "light": "#FFFFFF",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "agent": {
+                    "background": {
+                        "light": "#E9F8EE",
+                        "dark": "#0C5743"
+                    },
+                    "text": {
+                        "light": "#075E54",
+                        "dark": "#E8F8E8"
+                    }
+                },
+                "background": {
+                    "light": "#FFFFFF",
+                    "dark": "#121212"
+                },
+                "textInput": {
+                    "background": {
+                        "light": "#DCF8C6",
+                        "dark": "#075E54"
+                    },
+                    "placeholder": {
+                        "light": "#95D3AB",
+                        "dark": "#A1E1B8"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#E8E8E8"
+                    }
+                }
+            },
+            "thread": {
+                "selected": {
+                    "background": {
+                        "light": "#DCF8C6",
+                        "dark": "#075E54"
+                    },
+                    "primaryText": "#2D2D2D",
+                    "secondaryText": "#606062",
+                    "infoText": "#797979"
+                },
+                "unSelected": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#121212"
+                    },
+                    "primaryText": {
+                        "light": "#000000",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText": {
+                        "light": "#606062",
+                        "dark": "#FFFFFF"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#FFFFFF"
+                    }
+                }
+            },
+            "agent": {
+                "unselected": {
+                    "background": {
+                        "light": "#F7FAFB",
+                        "dark": "#19181B"
+                    },
+                    "text": {
+                        "light": "#000000",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "selected": {
+                    "background": "#E9EBF9",
+                    "text": "#000000"
+                }
+            }
+        }
+    },
+    {
+        "type": "instagram",
+        "font": {
+            "headline": {
+                "type": "bold",
+                "size": 32
+            },
+            "body": {
+                "type": "regular",
+                "size": 16
+            },
+            "chat": {
+                "message": {
+                    "type": "regular",
+                    "size": 16
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "messageInput": {
+                    "placeholder": {
+                        "type": "italic",
+                        "size": 14
+                    },
+                    "text": {
+                        "type": "regular",
+                        "size": 16
+                    }
+                }
+            },
+            "thread": {
+                "primary": {
+                    "type": "bold",
+                    "size": 14
+                },
+                "secondary": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                }
+            },
+            "agent": {
+                "primary": {
+                    "type": "italic",
+                    "size": 12
+                }
+            }
+        },
+        "color": {
+            "primary": {
+                "light": "#E1306C",
+                "dark": "#FF0066"
+            },
+            "secondary": {
+                "light": "#FDCB5A",
+                "dark": "#FFC700"
+            },
+            "error": {
+                "light": "#FF4B55",
+                "dark": "#FF6E75"
+            },
+            "chat": {
+                "user": {
+                    "background": {
+                        "light": "#833AB4",
+                        "dark": "#C13584"
+                    },
+                    "text": {
+                        "light": "#FFFFFF",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "agent": {
+                    "background": {
+                        "light": "#FDCB5A",
+                        "dark": "#FF0066"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "background": {
+                    "light": "#FFFFFF",
+                    "dark": "#1E1E1E"
+                },
+                "textInput": {
+                    "background": {
+                        "light": "#FEC8D8",
+                        "dark": "#833AB4"
+                    },
+                    "placeholder": {
+                        "light": "#F48FB1",
+                        "dark": "#E1BEE7"
+                    },
+                    "text": {
+                        "light": "#1A202C",
+                        "dark": "#F8F8F8"
+                    }
+                }
+            },
+            "thread": {
+                "selected": {
+                    "background": {
+                        "light": "#FDCB5A",
+                        "dark": "#FF0066"
+                    },
+                    "primaryText": "#2D2D2D",
+                    "secondaryText": "#606062",
+                    "infoText": "#797979"
+                },
+                "unSelected": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#1E1E1E"
+                    },
+                    "primaryText": {
+                        "light": "#000000",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText": {
+                        "light": "#606062",
+                        "dark": "#FFFFFF"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#FFFFFF"
+                    }
+                }
+            },
+            "agent": {
+                "unselected": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#1E1E1E"
+                    },
+                    "text": {
+                        "light": "#000000",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "selected": {
+                    "background": "#833AB4",
+                    "text": "#FFFFFF"
+                }
+            }
+        }
+    },
+    {
+        "type": "swiggy",
+        "font": {
+            "headline": {
+                "type": "bold",
+                "size": 32
+            },
+            "body": {
+                "type": "regular",
+                "size": 16
+            },
+            "chat": {
+                "message": {
+                    "type": "regular",
+                    "size": 16
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "messageInput": {
+                    "placeholder": {
+                        "type": "regular",
+                        "size": 14
+                    },
+                    "text": {
+                        "type": "regular",
+                        "size": 16
+                    }
+                }
+            },
+            "thread": {
+                "primary": {
+                    "type": "bold",
+                    "size": 14
+                },
+                "secondary": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                }
+            },
+            "agent": {
+                "primary": {
+                    "type": "bold",
+                    "size": 12
+                }
+            }
+        },
+        "color": {
+            "primary": {
+                "light": "#FC8019",
+                "dark": "#D15F00"
+            },
+            "secondary": {
+                "light": "#FFD2B1",
+                "dark": "#3D3D3D"
+            },
+            "error": {
+                "light": "#F05D23",
+                "dark": "#FF6F61"
+            },
+            "chat": {
+                "user": {
+                    "background": {
+                        "light": "#FC8019",
+                        "dark": "#FF8C42"
+                    },
+                    "text": {
+                        "light": "#FFFFFF",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "agent": {
+                    "background": {
+                        "light": "#FFEBD6",
+                        "dark": "#3D3D3D"
+                    },
+                    "text": {
+                        "light": "#FC8019",
+                        "dark": "#FFAA73"
+                    }
+                },
+                "background": {
+                    "light": "#FFF9F4",
+                    "dark": "#121212"
+                },
+                "textInput": {
+                    "background": {
+                        "light": "#FFEBD6",
+                        "dark": "#3D3D3D"
+                    },
+                    "placeholder": {
+                        "light": "#FCA074",
+                        "dark": "#FCA074"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#E8E8E8"
+                    }
+                }
+            },
+            "thread": {
+                "selected": {
+                    "background": {
+                        "light": "#FFD2B1",
+                        "dark": "#3D3D3D"
+                    },
+                    "primaryText": "#FC8019",
+                    "secondaryText": "#606062",
+                    "infoText": "#797979"
+                },
+                "unSelected": {
+                    "background": {
+                        "light": "#FFF9F4",
+                        "dark": "#121212"
+                    },
+                    "primaryText": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText": {
+                        "light": "#606062",
+                        "dark": "#FFFFFF"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#FFFFFF"
+                    }
+                }
+            },
+            "agent": {
+                "unselected": {
+                    "background": {
+                        "light": "#FFF9F4",
+                        "dark": "#121212"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "selected": {
+                    "background": "#FFD2B1",
+                    "text": "#FC8019"
+                }
+            }
+        }
+    },
+    {
+        "type": "netflix",
+        "font": {
+            "headline": {
+                "type": "bold",
+                "size": 32
+            },
+            "body": {
+                "type": "regular",
+                "size": 16
+            },
+            "chat": {
+                "message": {
+                    "type": "regular",
+                    "size": 16
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "messageInput": {
+                    "placeholder": {
+                        "type": "regular",
+                        "size": 14
+                    },
+                    "text": {
+                        "type": "regular",
+                        "size": 16
+                    }
+                }
+            },
+            "thread": {
+                "primary": {
+                    "type": "bold",
+                    "size": 14
+                },
+                "secondary": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                }
+            },
+            "agent": {
+                "primary": {
+                    "type": "bold",
+                    "size": 12
+                }
+            }
+        },
+        "color": {
+            "primary": {
+                "light": "#E50914",
+                "dark": "#B81D24"
+            },
+            "secondary": {
+                "light": "#F5F5F5",
+                "dark": "#282828"
+            },
+            "error": {
+                "light": "#D32F2F",
+                "dark": "#FF5C5C"
+            },
+            "chat": {
+                "user": {
+                    "background": {
+                        "light": "#E50914",
+                        "dark": "#B81D24"
+                    },
+                    "text": {
+                        "light": "#FFFFFF",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "agent": {
+                    "background": {
+                        "light": "#EDEDED",
+                        "dark": "#3D3D3D"
+                    },
+                    "text": {
+                        "light": "#333333",
+                        "dark": "#E8E8E8"
+                    }
+                },
+                "background": {
+                    "light": "#FFFFFF",
+                    "dark": "#121212"
+                },
+                "textInput": {
+                    "background": {
+                        "light": "#EDEDED",
+                        "dark": "#333333"
+                    },
+                    "placeholder": {
+                        "light": "#9E9E9E",
+                        "dark": "#707070"
+                    },
+                    "text": {
+                        "light": "#1A202C",
+                        "dark": "#E8E8E8"
+                    }
+                }
+            },
+            "thread": {
+                "selected": {
+                    "background": {
+                        "light": "#E50914",
+                        "dark": "#B81D24"
+                    },
+                    "primaryText": "#FFFFFF",
+                    "secondaryText": "#A0A0A0",
+                    "infoText": "#C0C0C0"
+                },
+                "unSelected": {
+                    "background": {
+                        "light": "#F5F5F5",
+                        "dark": "#282828"
+                    },
+                    "primaryText": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText": {
+                        "light": "#606062",
+                        "dark": "#FFFFFF"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#FFFFFF"
+                    }
+                }
+            },
+            "agent": {
+                "unselected": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#282828"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "selected": {
+                    "background": "#E50914",
+                    "text": "#FFFFFF"
+                }
+            }
+        }
+    },
+    {
+        "type": "linkedIn",
+        "font": {
+            "headline": {
+                "type": "bold",
+                "size": 32
+            },
+            "body": {
+                "type": "regular",
+                "size": 16
+            },
+            "chat": {
+                "message": {
+                    "type": "regular",
+                    "size": 16
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "messageInput": {
+                    "placeholder": {
+                        "type": "regular",
+                        "size": 14
+                    },
+                    "text": {
+                        "type": "regular",
+                        "size": 16
+                    }
+                }
+            },
+            "thread": {
+                "primary": {
+                    "type": "bold",
+                    "size": 14
+                },
+                "secondary": {
+                    "type": "regular",
+                    "size": 12
+                },
+                "info": {
+                    "type": "regular",
+                    "size": 12
+                }
+            },
+            "agent": {
+                "primary": {
+                    "type": "bold",
+                    "size": 12
+                }
+            }
+        },
+        "color": {
+            "primary": {
+                "light": "#0077B5",
+                "dark": "#005582"
+            },
+            "secondary": {
+                "light": "#D8E6F3",
+                "dark": "#0A66C2"
+            },
+            "error": {
+                "light": "#E53935",
+                "dark": "#FF6F61"
+            },
+            "chat": {
+                "user": {
+                    "background": {
+                        "light": "#0077B5",
+                        "dark": "#005582"
+                    },
+                    "text": {
+                        "light": "#FFFFFF",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "agent": {
+                    "background": {
+                        "light": "#D8E6F3",
+                        "dark": "#0A66C2"
+                    },
+                    "text": {
+                        "light": "#1A202C",
+                        "dark": "#E8E8E8"
+                    }
+                },
+                "background": {
+                    "light": "#F3F6FA",
+                    "dark": "#121212"
+                },
+                "textInput": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#2E3C4A"
+                    },
+                    "placeholder": {
+                        "light": "#95AECF",
+                        "dark": "#A8CCE8"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#E8E8E8"
+                    }
+                }
+            },
+            "thread": {
+                "selected": {
+                    "background": {
+                        "light": "#0077B5",
+                        "dark": "#005582"
+                    },
+                    "primaryText": "#FFFFFF",
+                    "secondaryText": "#A0A0A0",
+                    "infoText": "#C0C0C0"
+                },
+                "unSelected": {
+                    "background": {
+                        "light": "#D8E6F3",
+                        "dark": "#0A66C2"
+                    },
+                    "primaryText": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText": {
+                        "light": "#606062",
+                        "dark": "#FFFFFF"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#FFFFFF"
+                    }
+                }
+            },
+            "agent": {
+                "unselected": {
+                    "background": {
+                        "light": "#FFFFFF",
+                        "dark": "#2E3C4A"
+                    },
+                    "text": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    }
+                },
+                "selected": {
+                    "background": "#0077B5",
+                    "text": "#FFFFFF"
+                }
+            }
+        }
+    }
 ]
+ 

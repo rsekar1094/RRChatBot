@@ -2,39 +2,12 @@
   "originHash" : "3084e54380f53f4152f4cd84fc7a0e8c8c2d3ecd34220bd1520f8bfaa5c57655",
   "pins" : [
     {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher.git",
-      "state" : {
-        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
-        "version" : "7.12.0"
-      }
-    },
-    {
-      "identity" : "lottie-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-ios.git",
-      "state" : {
-        "revision" : "b4bd0604ded9574807f41b4004b57dd1226a30a4",
-        "version" : "3.5.0"
-      }
-    },
-    {
       "identity" : "rrappframeworks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rsekar1094/RRAppFrameworks.git",
       "state" : {
         "branch" : "main",
         "revision" : "885ea8b1ca4e428ec0cde8c0cc93b7a7d8e75671"
-      }
-    },
-    {
-      "identity" : "rrmediaview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/rsekar1094/RRMediaView.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "ff936d215b2a51869aa11c8457f5f1d0d4ae3e91"
       }
     }
   ],

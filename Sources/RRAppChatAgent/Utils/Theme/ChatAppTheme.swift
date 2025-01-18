@@ -9,12 +9,14 @@ import Foundation
 import RRAppTheme
 import SwiftUI
 
-enum ChatTheme: String, CaseIterable, Decodable {
+enum ChatTheme: String, CaseIterable, Identifiable, Decodable {
     case whatsapp
     case instagram
     case swiggy
     case netflix
     case linkedIn
+    
+    var id: String { rawValue }
 }
 
 struct ChatAppTheme: Decodable, Theme {

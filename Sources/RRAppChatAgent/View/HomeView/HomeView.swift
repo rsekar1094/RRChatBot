@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import RRMediaView
 import Combine
 import RRAppUtils
 
@@ -79,7 +78,6 @@ public struct HomeView: View {
                     AssistantsListView(viewModel: viewModel.assistantsViewModel)
                         .onChange(of: proxy.safeAreaInsets.leading) { old, new in
                             leftSafeAreaWidth = new
-                            print("leftSafeAreaWidth \(new) \(old) \(leftSafeAreaWidth)")
                         }
                 }
                 .navigationSplitViewColumnWidth(150 + leftSafeAreaWidth)
@@ -104,6 +102,9 @@ struct AssistantsListView: View {
     @Inject
     var theme: ChatAppTheme
     
+    @State
+    var showThemeSelectSheet: Bool = false
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -119,6 +120,30 @@ struct AssistantsListView: View {
             }
         }
         .background(theme.chatColor.agent.unselected.background)
+        .sheet(isPresented: $showThemeSelectSheet) {
+            VStack {
+                ForEach(ChatTheme.allCases) { item in
+                    Text(item.rawValue.localizedCapitalized)
+                        .padding()
+                        .onTapGesture {
+                            RRAppChatAgent.loadTheme(type: item)
+                            showThemeSelectSheet = false
+                        }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(
+                    action: {
+                        showThemeSelectSheet = true
+                    }, label: {
+                        Image(systemName: "gear.circle.fill")
+                    }
+                )
+                .foregroundStyle(theme.color.primary)
+            }
+        }
     }
 }
 
@@ -149,10 +174,12 @@ struct AssistantListCellView: View {
     var contentView: some View {
         VStack {
             if let url = viewModel.imageUrl {
-                MediaView(
-                    mediaType: .image(.remote(url)),
-                    size: .both(.init(width: 100, height: 100))
-                )
+                AsyncImage(url: url) { result in
+                    result.image?
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+                .frame(width: 100, height: 100)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
                 RoundedRectangle(cornerRadius: 10)
@@ -168,6 +195,7 @@ struct AssistantListCellView: View {
             Text(viewModel.name)
                 .font(.system(size: 10))
                 .foregroundStyle(textColor)
+                .padding(.bottom, 8)
         }
     }
     
@@ -216,13 +244,4 @@ class AssistantsListViewModel: ObservableObject {
     func didSelectedAssistant(with id: String) {
         selectedAssistantId = id
     }
-}
-
-
-extension URL: MediaSourceURL {
-    public var url: URL {
-        return self
-    }
-    
-    
 }
