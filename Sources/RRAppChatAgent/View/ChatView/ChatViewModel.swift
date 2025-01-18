@@ -8,13 +8,19 @@
 import Foundation
 import RRAppUtils
 import RRAppNetwork
+import Combine
 import os
 
 @MainActor
 public class ChatViewModel: ObservableObject {
     
     let chatRepository: ChatRepository
-    var input: Input
+    
+    @Inject
+    var threadRepository: ThreadsRepository
+    
+    @Published
+    var containerData: ChatContainerData?
     
     @Published
     var messages: [ChatMessageViewModel] = []
@@ -22,9 +28,18 @@ public class ChatViewModel: ObservableObject {
     @Published
     var messageInput: ChatMessageInputViewModel = .init()
     
+    @Published
     var viewState: ViewState = .idle
+    
+    @Published
+    var navigationTitle: String?
+    
+    private var subscribers: Set<AnyCancellable> = .init()
 
-    let logger = Logger(subsystem: "RRAppChatAgent.ChatViewModel", category: "ViewModel")
+    let logger = Logger(
+        subsystem: "RRAppChatAgent.ChatViewModel", 
+        category: "ViewModel"
+    )
     
     public convenience init(input: Input) {
         self.init(
@@ -37,13 +52,29 @@ public class ChatViewModel: ObservableObject {
     
     init(input: Input, chatRepository: ChatRepository) {
         self.chatRepository = chatRepository
-        self.input = input
+        self.containerData = input.containerData
+        listenToObservers()
+    }
+    
+    func listenToObservers() {
+        $containerData
+            .sink { [weak self] containerData in
+                guard let self else { return }
+                
+                if let containerData  {
+                    let thread = threadRepository.currentThreads.value[containerData.assistantId]?.first(where: { $0.threadId == containerData.threadId })
+                    self.navigationTitle = thread?.threadName
+                } else {
+                    self.navigationTitle = nil
+                }
+            }
+            .store(in: &subscribers)
     }
 }
 
 public extension ChatViewModel {
     func fetchAllInitialMessages() async {
-        guard let threadId = input.threadId else { return }
+        guard let threadId = containerData?.threadId else { return }
         self.viewState = .fetching
         
         do {
@@ -55,40 +86,37 @@ public extension ChatViewModel {
     }
     
     func sendMessage() async {
-        guard messageInput.isValid else { return }
+        guard let container = containerData,
+                messageInput.isValid else { return }
         
         let message = messageInput.message
         self.messages.append(
             .init(
                 id: UUID().uuidString,
                 content: .text(message),
-                userType: .user
+                userType: .user,
+                date: Date()
             )
         )
         messageInput.message = ""
+    
+        self.appendMessageLoaderIfNot("Processing")
         
         do {
-            if let threadId = input.threadId {
-                _ = try await chatRepository.appendUserMessage(into: threadId, message: message)
-                try await chatRepository.runAndListen(to: threadId, assistantId: input.assistantId) { [weak self] data in
-                    guard let self else { return }
-                    Task { @MainActor in
-                        self.listenForRun(data: data)
-                    }
-                }
-            } else {
-                try await chatRepository.createAndRunThenListen(
-                    assistantId: input.assistantId,
-                    userMessage: message
-                ) { [weak self] data in
-                    guard let self else { return }
-                    Task { @MainActor in
-                        self.listenForRun(data: data)
-                    }
+            let threadId = container.threadId
+            _ = try await chatRepository.appendUserMessage(
+                into: threadId,
+                assistantId: container.assistantId,
+                message: message
+            )
+            try await chatRepository.runAndListen(to: threadId, assistantId: container.assistantId) { [weak self] data in
+                guard let self else { return }
+                Task { @MainActor in
+                    self.listenForRun(data: data)
                 }
             }
         } catch {
-            
+            removeMessageLoader()
         }
     }
     
@@ -97,7 +125,14 @@ public extension ChatViewModel {
             self.messages.remove(at: index)
         }
         
-        self.messages.append(.init(id: "loader", content: .loading(message: message), userType: .agent))
+        self.messages.append(
+            .init(
+                id: "loader",
+                content: .loading(message: message),
+                userType: .agent,
+                date: Date()
+            )
+        )
     }
     
     private func removeMessageLoader() {
@@ -108,16 +143,15 @@ public extension ChatViewModel {
     
     func listenForRun(data: ChatEventData) {
         print("event \(data.event.rawValue) \(data.meta)===========\n\n")
-        self.messageInput.isReadyToSend = false
         
         switch data.event {
         case .thread:
             self.appendMessageLoaderIfNot("Processing")
-            input.threadId = data.meta?.id
-        case .threadCreated:
+        case .threadRunCreated:
             self.appendMessageLoaderIfNot("Processing")
-            input.threadId = data.meta?.threadId
         case .threadMessageDelta:
+            self.messageInput.isReadyToSend = false
+           
             self.removeMessageLoader()
             if let id = self.messages.firstIndex { $0.id == data.meta?.id } {
                 let message = self.messages[id]
@@ -128,7 +162,12 @@ public extension ChatViewModel {
                     break
                 }
                 value += data.meta?.delta?.content.first?.text?.value ?? ""
-                self.messages[id] = .init(id: message.id, content: .text(value), userType: .agent)
+                self.messages[id] = .init(
+                    id: message.id,
+                    content: .text(value),
+                    userType: .agent,
+                    date: message.date
+                )
             } else {
                 self.messages.append(
                     .init(
@@ -136,16 +175,22 @@ public extension ChatViewModel {
                         content: .text(
                             data.meta?.delta?.content.first?.text?.value ?? ""
                         ),
-                        userType: .agent
+                        userType: .agent,
+                        date: Date()
                     )
                 )
             }
         case .threadMessageCompleted:
-            self.messageInput.isReadyToSend = false
+            self.messageInput.isReadyToSend = true
             self.removeMessageLoader()
             if let id = self.messages.firstIndex { $0.id == data.meta?.id } {
                 let message = self.messages[id]
-                self.messages[id] = .init(id: message.id, content: .text(data.meta?.content?.first?.text?.value ?? ""), userType: .agent)
+                self.messages[id] = .init(
+                    id: message.id,
+                    content: .text(data.meta?.content?.first?.text?.value ?? ""),
+                    userType: .agent,
+                    date: Date()
+                )
             }
         case .threadQueued:
             self.appendMessageLoaderIfNot("Processing")
@@ -160,7 +205,7 @@ public extension ChatViewModel {
         case .threadMessageInProgress:
             break
         case .threadRunCompleted, .threadStepCompleted:
-            self.messageInput.isReadyToSend = false
+            self.messageInput.isReadyToSend = true
         case .unknown:
             break
         }
@@ -170,10 +215,18 @@ public extension ChatViewModel {
 
 public extension ChatViewModel {
     struct Input {
-        var threadId: String?
-        let assistantId: String
+        let containerData: ChatContainerData?
         
-        public init(threadId: String?, assistantId: String) {
+        public init(containerData: ChatContainerData?) {
+            self.containerData = containerData
+        }
+    }
+    
+    class ChatContainerData {
+        var threadId: String
+        var assistantId: String
+        
+        public init(threadId: String, assistantId: String) {
             self.threadId = threadId
             self.assistantId = assistantId
         }
@@ -202,9 +255,9 @@ extension ChatMessageViewModel {
         
         switch message.content{
         case .text(let value):
-            self = .init(id: message.id,content: .text(value), userType: userType)
+            self = .init(id: message.id,content: .text(value), userType: userType, date: message.createdAt)
         case .unknown:
-            self = .init(id: message.id,content: .unknown, userType: userType)
+            self = .init(id: message.id,content: .unknown, userType: userType, date: message.createdAt)
         }
     }
 }

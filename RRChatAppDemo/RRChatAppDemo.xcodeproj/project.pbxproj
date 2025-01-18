@@ -7,14 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C16D7792D3C558A00E1C503 /* ChatApp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3C16D7782D3C558900E1C503 /* ChatApp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3C16D78F2D3C55CD00E1C503 /* RRAppChatAgent in Frameworks */ = {isa = PBXBuildFile; productRef = 3C16D78E2D3C55CD00E1C503 /* RRAppChatAgent */; };
 		3CECDB1E2D28B0F500AE5608 /* RRAppChatAgent in Frameworks */ = {isa = PBXBuildFile; productRef = 3CECDB1D2D28B0F500AE5608 /* RRAppChatAgent */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3C16D77A2D3C558A00E1C503 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CFCB60E2D200BD30084E367 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C16D7772D3C558900E1C503;
+			remoteInfo = "ChatApp Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3C16D7882D3C558C00E1C503 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				3C16D7792D3C558A00E1C503 /* ChatApp Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3C16D7732D3C558900E1C503 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C16D7782D3C558900E1C503 /* ChatApp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatApp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CFCB6162D200BD30084E367 /* RRChatAppDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RRChatAppDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		3C16D77C2D3C558A00E1C503 /* ChatApp Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "ChatApp Watch App";
+			sourceTree = "<group>";
+		};
 		3CFCB6182D200BD30084E367 /* RRChatAppDemo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RRChatAppDemo;
@@ -23,6 +56,14 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3C16D7752D3C558900E1C503 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C16D78F2D3C55CD00E1C503 /* RRAppChatAgent in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3CFCB6132D200BD30084E367 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -34,10 +75,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C16D78D2D3C55CD00E1C503 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3CFCB60D2D200BD30084E367 = {
 			isa = PBXGroup;
 			children = (
 				3CFCB6182D200BD30084E367 /* RRChatAppDemo */,
+				3C16D77C2D3C558A00E1C503 /* ChatApp Watch App */,
+				3C16D78D2D3C55CD00E1C503 /* Frameworks */,
 				3CFCB6172D200BD30084E367 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,6 +96,8 @@
 			isa = PBXGroup;
 			children = (
 				3CFCB6162D200BD30084E367 /* RRChatAppDemo.app */,
+				3C16D7732D3C558900E1C503 /* ChatApp.app */,
+				3C16D7782D3C558900E1C503 /* ChatApp Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,6 +105,48 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3C16D7722D3C558900E1C503 /* ChatApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C16D78C2D3C558C00E1C503 /* Build configuration list for PBXNativeTarget "ChatApp" */;
+			buildPhases = (
+				3C16D7712D3C558900E1C503 /* Resources */,
+				3C16D7882D3C558C00E1C503 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C16D77B2D3C558A00E1C503 /* PBXTargetDependency */,
+			);
+			name = ChatApp;
+			packageProductDependencies = (
+			);
+			productName = ChatApp;
+			productReference = 3C16D7732D3C558900E1C503 /* ChatApp.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		3C16D7772D3C558900E1C503 /* ChatApp Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C16D78B2D3C558C00E1C503 /* Build configuration list for PBXNativeTarget "ChatApp Watch App" */;
+			buildPhases = (
+				3C16D7742D3C558900E1C503 /* Sources */,
+				3C16D7752D3C558900E1C503 /* Frameworks */,
+				3C16D7762D3C558900E1C503 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3C16D77C2D3C558A00E1C503 /* ChatApp Watch App */,
+			);
+			name = "ChatApp Watch App";
+			packageProductDependencies = (
+				3C16D78E2D3C55CD00E1C503 /* RRAppChatAgent */,
+			);
+			productName = "ChatApp Watch App";
+			productReference = 3C16D7782D3C558900E1C503 /* ChatApp Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		3CFCB6152D200BD30084E367 /* RRChatAppDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CFCB6242D200BD50084E367 /* Build configuration list for PBXNativeTarget "RRChatAppDemo" */;
@@ -83,9 +177,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					3C16D7722D3C558900E1C503 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					3C16D7772D3C558900E1C503 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					3CFCB6152D200BD30084E367 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -109,11 +209,27 @@
 			projectRoot = "";
 			targets = (
 				3CFCB6152D200BD30084E367 /* RRChatAppDemo */,
+				3C16D7722D3C558900E1C503 /* ChatApp */,
+				3C16D7772D3C558900E1C503 /* ChatApp Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3C16D7712D3C558900E1C503 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C16D7762D3C558900E1C503 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3CFCB6142D200BD30084E367 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,6 +240,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3C16D7742D3C558900E1C503 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3CFCB6122D200BD30084E367 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -133,7 +256,103 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		3C16D77B2D3C558A00E1C503 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C16D7772D3C558900E1C503 /* ChatApp Watch App */;
+			targetProxy = 3C16D77A2D3C558A00E1C503 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		3C16D7862D3C558C00E1C503 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T8G22WTMB9;
+				INFOPLIST_KEY_CFBundleDisplayName = ChatApp;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rr.ChatApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3C16D7872D3C558C00E1C503 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T8G22WTMB9;
+				INFOPLIST_KEY_CFBundleDisplayName = ChatApp;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rr.ChatApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3C16D7892D3C558C00E1C503 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ChatApp Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = T8G22WTMB9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ChatApp;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rr.ChatApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		3C16D78A2D3C558C00E1C503 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ChatApp Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = T8G22WTMB9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ChatApp;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rr.ChatApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
 		3CFCB6222D200BD50084E367 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -314,6 +533,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3C16D78B2D3C558C00E1C503 /* Build configuration list for PBXNativeTarget "ChatApp Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C16D7892D3C558C00E1C503 /* Debug */,
+				3C16D78A2D3C558C00E1C503 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C16D78C2D3C558C00E1C503 /* Build configuration list for PBXNativeTarget "ChatApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C16D7862D3C558C00E1C503 /* Debug */,
+				3C16D7872D3C558C00E1C503 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3CFCB6112D200BD30084E367 /* Build configuration list for PBXProject "RRChatAppDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -342,6 +579,11 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3C16D78E2D3C55CD00E1C503 /* RRAppChatAgent */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3CECDB1C2D28B0F500AE5608 /* XCLocalSwiftPackageReference "../../RRChatBot" */;
+			productName = RRAppChatAgent;
+		};
 		3CECDB1D2D28B0F500AE5608 /* RRAppChatAgent */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RRAppChatAgent;

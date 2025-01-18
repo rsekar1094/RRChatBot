@@ -9,48 +9,47 @@ import Foundation
 import SwiftUI
 import RRMediaView
 import Combine
+import RRAppUtils
 
 @MainActor
 class HomeViewModel: ObservableObject {
     @Published var assistantsViewModel: AssistantsListViewModel = .init(assistantRepository: AssistantRepositoryImpl())
-    @Published var threadsViewModel: ThreadsViewModel?
-    @Published var chatViewModel: ChatViewModel?
+    @Published var threadsViewModel = ThreadsViewModel(assistantId: nil)
+    @Published var chatViewModel: ChatViewModel = ChatViewModel(input: .init(containerData: nil))
     
     private var cancellables: Set<AnyCancellable> = .init()
     
     init() {
         listenToAssistantObservers()
+        listenToThreadObservers()
     }
     
     func listenToAssistantObservers() {
         assistantsViewModel.$selectedAssistantId
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] selectedAssistantId in
                 guard let self, let selectedAssistantId else { return }
                 
-                if self.threadsViewModel?.assistantId != selectedAssistantId {
-                    self.threadsViewModel = ThreadsViewModel(assistantId: selectedAssistantId)
-                    self.listenToThreadObservers(for: selectedAssistantId)
+                if self.threadsViewModel.assistantId != selectedAssistantId {
+                    self.chatViewModel.containerData = nil
+                    self.threadsViewModel.assistantId = selectedAssistantId
                 }
                 
             }
             .store(in: &cancellables)
     }
     
-    func listenToThreadObservers(for assistantId: String) {
-        threadsViewModel?.$selectedThreadId
-            .sink { [weak self] selectedThreadId in
+    func listenToThreadObservers() {
+        threadsViewModel.$selectedThreadId
+            .sink { [weak self] selectedThreadId  in
                 guard let self,
-                        let selectedThreadId else {
-                    self?.chatViewModel = nil
+                      let selectedThreadId,
+                      let selectedAssistantId = self.assistantsViewModel.selectedAssistantId else {
+                    self?.chatViewModel.containerData = nil
                     return
                 }
                 
-                self.chatViewModel = ChatViewModel(
-                    input: .init(
-                        threadId: selectedThreadId,
-                        assistantId: assistantId
-                    )
-                )
+                self.chatViewModel.containerData = .init(threadId: selectedThreadId, assistantId: selectedAssistantId)
             }
             .store(in: &cancellables)
     }
@@ -67,6 +66,9 @@ public struct HomeView: View {
     @State
     var leftSafeAreaWidth: CGFloat = 30
     
+    @Inject
+    var theme: ChatAppTheme
+    
     public init() {}
     
     public var body: some View {
@@ -81,22 +83,14 @@ public struct HomeView: View {
                         }
                 }
                 .navigationSplitViewColumnWidth(150 + leftSafeAreaWidth)
-                .background(Color.black)
+                .background(theme.chatColor.agent.unselected.background)
             },
             content: {
-                if let threadsViewModel = viewModel.threadsViewModel {
-                    ThreadsView(viewModel: threadsViewModel)
-                        .navigationSplitViewColumnWidth(250)
-                } else {
-                    Color.red
-                }
+                ThreadsView(viewModel: viewModel.threadsViewModel)
+                    .navigationSplitViewColumnWidth(250)
             },
             detail: {
-                if let chatViewModel = viewModel.chatViewModel {
-                    ChatView(viewModel: chatViewModel)
-                } else {
-                    Color.blue
-                }
+                ChatView(viewModel: viewModel.chatViewModel)
             }
         )
         .navigationSplitViewStyle(.balanced)
@@ -107,17 +101,24 @@ struct AssistantsListView: View {
     @ObservedObject
     var viewModel: AssistantsListViewModel
     
+    @Inject
+    var theme: ChatAppTheme
+    
     var body: some View {
         ScrollView {
             VStack {
                 ForEach(viewModel.assistants) { assistant in
-                    AssistantListCellView(viewModel: assistant, isSelected: assistant.id == viewModel.selectedAssistantId)
-                        .onTapGesture {
-                            viewModel.didSelectedAssistant(with: assistant.id)
-                        }
+                    AssistantListCellView(
+                        viewModel: assistant,
+                        isSelected: assistant.id == viewModel.selectedAssistantId
+                    )
+                    .onTapGesture {
+                        viewModel.didSelectedAssistant(with: assistant.id)
+                    }
                 }
             }
         }
+        .background(theme.chatColor.agent.unselected.background)
     }
 }
 
@@ -125,30 +126,54 @@ struct AssistantListCellView: View {
     let viewModel: AssistantListCellViewModel
     let isSelected: Bool
     
+    @Inject
+    var theme: ChatAppTheme
+    
     var body: some View {
-        contentView
-            .overlay {
-                RoundedRectangle(cornerSize: .init(width: 10, height: 10))
-                    .stroke(isSelected ? Color.white : Color.red, lineWidth: isSelected ? 4 : 2)
-            }
-            .padding(.horizontal, 5)
-            .padding(.vertical, 5)
+        if isSelected {
+            contentView
+                .padding(.horizontal, 5)
+                .padding(.vertical, 5)
+                .background(
+                    RoundedRectangle(cornerSize: .init(width: 10, height: 10))
+                        .fill(theme.chatColor.agent.selected.background)
+                )
+        } else {
+            contentView
+                .padding(.horizontal, 5)
+                .padding(.vertical, 5)
+        }
     }
     
     @ViewBuilder
     var contentView: some View {
-        if let url = viewModel.imageUrl {
-            MediaView(
-                mediaType: .image(.remote(url)),
-                size: .both(.init(width: 100, height: 100))
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-        } else {
+        VStack {
+            if let url = viewModel.imageUrl {
+                MediaView(
+                    mediaType: .image(.remote(url)),
+                    size: .both(.init(width: 100, height: 100))
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.black)
+                    .frame(width: 100, height: 100)
+                    .overlay {
+                        Text(viewModel.name)
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.white)
+                    }
+            }
+            
             Text(viewModel.name)
                 .font(.system(size: 10))
-                .foregroundStyle(Color.white)
-                .frame(width: 100, height: 100)
+                .foregroundStyle(textColor)
         }
+    }
+    
+    var textColor: Color {
+        let agent = theme.chatColor.agent
+        return isSelected ? agent.selected.text : agent.unselected.text
     }
 }
 

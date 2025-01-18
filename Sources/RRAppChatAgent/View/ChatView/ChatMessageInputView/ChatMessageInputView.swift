@@ -20,7 +20,7 @@ class ChatMessageInputViewModel: ObservableObject {
 struct ChatMessageInputView: View {
     
     @Inject
-    var theme: Theme
+    var theme: ChatAppTheme
    
     @ObservedObject
     var viewModel: ChatMessageInputViewModel
@@ -29,25 +29,31 @@ struct ChatMessageInputView: View {
     
     var body: some View {
         HStack {
-            TextField("Ask something...", text: $viewModel.message)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding([.leading, .vertical])
+            
+            TextField(text: $viewModel.message) {
+                Text("Ask something...")
+                    .font(theme.chatFont.chat.messageInput.placeholder)
+                    .foregroundStyle(theme.chatColor.chat.textInput.placeholder)
+            }
+            .foregroundStyle(theme.chatColor.chat.textInput.text)
+            .font(theme.chatFont.chat.messageInput.text)
+            .padding([.leading, .vertical])
             
             Button(
                 action: {
-                    guard viewModel.isReadyToSend else { return }
+                    guard viewModel.isValid, viewModel.isReadyToSend else { return }
                     sendCompletion()
                 }, label: {
                     Image(systemName: "paperplane.circle.fill")
                         .resizable()
                         .frame(width: 25, height: 25)
+                        .foregroundStyle(theme.color.primary)
                         .padding()
-                        .foregroundStyle(Color.red)
                 }
             )
-            .disabled(!viewModel.isValid)
             .opacity(viewModel.isValid ? 1 : 0.2)
            
         }
+        .background(theme.chatColor.chat.textInput.background)
     }
 }

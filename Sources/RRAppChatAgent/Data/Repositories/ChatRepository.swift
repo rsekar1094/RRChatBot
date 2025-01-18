@@ -13,7 +13,7 @@ import RRAppUtils
 protocol ChatRepository: Sendable {
     func createAThread() async throws -> String
     
-    func appendUserMessage(into threadId: String, message: String) async throws -> String
+    func appendUserMessage(into threadId: String, assistantId: String, message: String) async throws -> String
     func fetchAllMessage(from threadId: String) async throws -> [MessageDTO]
     
     func runAndListen(to threadId: String, assistantId: String, listener: @escaping @Sendable (ChatEventData) -> Void) async throws
@@ -25,6 +25,9 @@ actor ChatRepositoryImpl: ChatRepository {
     
     @Inject
     private var networkManager: NetworkService
+    
+    @Inject
+    private var threadRepository: ThreadsRepository
     
     private var streamingNetworkManager: StreamingNetworkService
     private var streamingListeners: [Int: @Sendable (ChatEventData) -> Void] = [:]
@@ -58,11 +61,13 @@ extension ChatRepositoryImpl {
 
 // MARK: - ChatRepositoryImpl + Message
 extension ChatRepositoryImpl {
-    func appendUserMessage(into threadId: String, message: String) async throws -> String {
+    func appendUserMessage(into threadId: String, assistantId: String, message: String) async throws -> String {
         let requestBody: [String: Any] = [
             "role": "user",
             "content": message
         ]
+        
+        threadRepository.updateThread(threadId: threadId, lastSneakPeakMessage: message, in: assistantId)
         
         let response: MessageCreationResponse = try await networkManager.perform(
             request: .init(
@@ -72,7 +77,7 @@ extension ChatRepositoryImpl {
                 additionalHeader: commonAdditionalHeader
             )
         )
-        
+    
         return response.id
     }
     
@@ -176,7 +181,7 @@ public struct ChatEventData: Sendable {
 
 public enum ChatEvent: String, Sendable {
     case thread = "thread"
-    case threadCreated = "thread.run.created"
+    case threadRunCreated = "thread.run.created"
     case threadQueued = "thread.run.queued"
     case threadInProgress = "thread.run.in_progress"
     case threadStepCreated = "thread.run.step.created"

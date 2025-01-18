@@ -18,7 +18,7 @@ struct TypewriterText: View {
     @State private var cancellable: AnyCancellable?
     
     var body: some View {
-        Text(displayedText)
+        Text(LocalizedStringKey(displayedText))
             .onAppear {
                 startTyping()
             }
@@ -40,7 +40,7 @@ struct TypewriterText: View {
         var currentIndex = 0
         if fullText.contains(oldText) {
             if let range = fullText.range(of: oldText) {
-                displayedText = String(fullText[fullText.startIndex...range.upperBound])
+                displayedText = String(fullText[fullText.startIndex..<range.upperBound])
                 currentIndex = fullText.distance(from: fullText.startIndex, to: range.upperBound)
             }
         } else {

@@ -16,12 +16,13 @@ public struct RRAppChatAgent {
 private extension RRAppChatAgent {
     static func loadTheme() {
         do {
-            let models: [AppTheme] = try JSONManager.fetchArrayData(fileName: "Theme", from: .module)
+            let models: [ChatAppTheme] = try JSONManager.fetchArrayData(fileName: "Theme", from: .module)
             if let model = models.first {
                 Resolver.shared.add(model,key: String(reflecting: Theme.self))
+                Resolver.shared.add(model,key: String(reflecting: ChatAppTheme.self))
             }
         } catch {
-            
+            print("\(error)")
         }
     }
     

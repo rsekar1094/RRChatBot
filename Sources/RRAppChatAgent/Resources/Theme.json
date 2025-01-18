@@ -8,12 +8,128 @@
          "body":{
             "type":"regular",
             "size":16
+         },
+         "chat": {
+             "message": {
+                 "type":"regular",
+                 "size":16
+             },
+             "info": {
+                 "type":"regular",
+                 "size":12
+             },
+             "messageInput" : {
+                 "placeholder": {
+                     "type":"regular",
+                     "size":14
+                 },
+                 "text": {
+                     "type":"regular",
+                     "size":16
+                 }
+             }
+         },
+         "thread": {
+             "primary": {
+                 "type":"bold",
+                 "size":14
+             },
+             "secondary": {
+                 "type":"regular",
+                 "size":12
+             },
+             "info": {
+                 "type":"regular",
+                 "size":12
+             }
+         },
+         "agent": {
+             "primary": {
+                 "type":"bold",
+                 "size":12
+             }
          }
       },
       "color":{
-         "primary":"#FDFDFD",
+         "primary": "#625EEA",
          "secondary":"#DDFFDD",
-         "error":"#DDDDDD"
+         "error":"#DDDDDD",
+         "chat": {
+             "user": {
+                 "background": {
+                     "light": "#625EEA",
+                     "dark": "#625EEA",
+                 },
+                 "text": {
+                     "light": "#FFFFFF",
+                     "dark": "#FFFFFF"
+                 }
+             },
+             "agent": {
+                 "background": {
+                     "light": "#E9EBF9",
+                     "dark": "#E9EBF9",
+                 },
+                 "text": {
+                     "light": "#010405",
+                     "dark": "#010405",
+                 }
+             },
+             "background": {
+                 "light": "#F7FAFB",
+                 "dark": "#19181B",
+             },
+             "textInput": {
+                 "background":  "#E9EBF9",
+                 "placeholder": "#606062",
+                 "text": "#000000"
+             }
+         },
+         "thread": {
+             "selected" : {
+                 "background": {
+                     "light": "#E9EBF9",
+                     "dark": "#E9EBF9",
+                 },
+                 "primaryText": "#000000",
+                 "secondaryText": "#606062",
+                 "infoText": "#797979"
+             },
+             "unSelected" : {
+                 "background": {
+                     "light": "#F7FAFB",
+                     "dark": "#19181B",
+                 },
+                 "primaryText": {
+                     "light": "#000000",
+                     "dark": "#FFFFFF",
+                 },
+                 "secondaryText": {
+                     "light": "#606062",
+                     "dark": "#FFFFFF",
+                 },
+                 "infoText": {
+                     "light": "#797979",
+                     "dark": "#FFFFFF",
+                 }
+             }
+         },
+         "agent": {
+             "unselected": {
+                 "background":{
+                     "light": "#F7FAFB",
+                     "dark": "#19181B",
+                 },
+                 "text": {
+                     "light": "#000000",
+                     "dark": "#FFFFFF",
+                 }
+             },
+             "selected": {
+                 "background": "#E9EBF9",
+                 "text": "#000000"
+             }
+         }
       },
       "type":"whatsapp"
    }

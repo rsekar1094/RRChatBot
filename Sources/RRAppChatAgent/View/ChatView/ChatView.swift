@@ -16,8 +16,11 @@ struct ChatView: View {
     @ObservedObject
     var viewModel: ChatViewModel
     
+    @Inject
+    var theme: ChatAppTheme
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             messageListView
             
             ChatMessageInputView(viewModel: viewModel.messageInput) {
@@ -26,7 +29,8 @@ struct ChatView: View {
                 }
             }
         }
-        .task(id: viewModel.input.threadId) {
+        .navigationTitle(viewModel.navigationTitle ?? "")
+        .task(id: viewModel.containerData?.threadId) {
             await viewModel.fetchAllInitialMessages()
         }
     }
@@ -42,6 +46,8 @@ extension ChatView {
                         .padding(message.userType.edgePadding, 50)
                         .frame(maxWidth: .infinity, alignment: message.userType.alignment)
                         .id(message.id)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 16)
                 }
                 .onChange(of: viewModel.messages) { oldMessage, newMessages in
                     if oldMessage.isEmpty {
@@ -53,7 +59,7 @@ extension ChatView {
                     }
                 }
             }
-            .padding()
         }
+        .background(theme.chatColor.chat.background)
     }
 }

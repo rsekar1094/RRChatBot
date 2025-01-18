@@ -11,6 +11,7 @@ import Foundation
 struct MessageDTO {
     let id: String
     let threadId: String
+    let createdAt: Date
     let role: ParticipantRole
     let content: MessageContent
 }
@@ -59,6 +60,7 @@ extension MessageListResponse.Message {
         return MessageDTO(
             id: id,
             threadId: threadId,
+            createdAt: Date(timeIntervalSince1970: createdAt),
             role: MessageDTO.ParticipantRole(rawValue: role),
             content: messageContent
         )

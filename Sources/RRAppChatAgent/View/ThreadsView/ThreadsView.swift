@@ -12,22 +12,40 @@ import RRAppUtils
 
 struct ThreadsView: View {
     
-    @ObservedObject var viewModel: ThreadsViewModel
+    @ObservedObject
+    var viewModel: ThreadsViewModel
+    
+    @Inject
+    var theme: ChatAppTheme
     
     var body: some View {
         ScrollView {
             VStack {
-                Button("Add Thread") {
-                    viewModel.createNewThread()
-                }
-                
                 ForEach(viewModel.threads) { thread in
-                    ThreadCellView(viewModel: thread, isSelected: viewModel.selectedThreadId == thread.id)
-                        .onTapGesture {
-                            viewModel.didSelectedThread(id: thread.id)
-                        }
+                    ThreadCellView(
+                        viewModel: thread,
+                        isSelected: viewModel.selectedThreadId == thread.id
+                    )
+                    .padding(.horizontal, 16)
+                    .onTapGesture {
+                        viewModel.didSelectedThread(id: thread.id)
+                    }
                 }
                 
+            }
+        }
+        .background(theme.chatColor.thread.unSelected.background)
+        .navigationTitle("Threads")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(
+                    action: {
+                        viewModel.createNewThread()
+                    }, label: {
+                        Image(systemName: "plus")
+                    }
+                )
+                .foregroundStyle(theme.color.primary)
             }
         }
     }
@@ -46,9 +64,13 @@ class ThreadsViewModel: ObservableObject {
     
     private var cancellables: Set<AnyCancellable> = []
     
-    let assistantId: String
+    var assistantId: String? {
+        didSet {
+            self.assignThreads(for: threadsRepository.currentThreads.value)
+        }
+    }
     
-    init(assistantId: String) {
+    init(assistantId: String?) {
         self.assistantId = assistantId
         assignListener()
     }
@@ -61,19 +83,29 @@ class ThreadsViewModel: ObservableObject {
                 },
                 receiveValue: { [weak self] threads in
                     guard let self else { return }
-                    let sortedThreads = threads[assistantId]?.sorted(by: { $0.lastUpdatedAt > $1.lastUpdatedAt }) ?? []
-                    self.threads = sortedThreads.map { .init(model: $0) }
-                    
-                    if self.selectedThreadId == nil, let id = self.threads.first?.id {
-                        self.didSelectedThread(id: id)
-                    }
+                    self.assignThreads(for: threads)
                 }
             )
             .store(in: &cancellables)
     }
     
+    private func assignThreads(for threads: [String: [ThreadsDTO]]) {
+        guard let assistantId else { return }
+        
+        let sortedThreads = threads[assistantId]?.sorted(by: { $0.lastUpdatedAt > $1.lastUpdatedAt }) ?? []
+        self.threads = sortedThreads.map { .init(model: $0) }
+        
+        if self.selectedThreadId == nil, let id = self.threads.first?.id {
+            self.didSelectedThread(id: id)
+        }
+    }
+    
     func createNewThread() {
-        threadsRepository.createAThread(for: assistantId)
+        guard let assistantId else { return }
+        
+        Task {
+            let id = try? await threadsRepository.createAThread(for: assistantId)
+        }
     }
     
     func didSelectedThread(id: String) {
@@ -89,24 +121,55 @@ struct ThreadCellView: View {
     
     let isSelected: Bool
     
+    @Inject
+    var theme: ChatAppTheme
+    
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
                 Text(viewModel.primaryText)
-                
-                Spacer()
+                    .lineLimit(1)
+                    .foregroundStyle(primaryColor)
+                    .font(theme.chatFont.thread.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text(viewModel.info)
+                    .foregroundStyle(infoColor)
+                    .font(theme.chatFont.thread.info)
             }
             
             Text(viewModel.secondaryText)
+                .foregroundStyle(secondaryColor)
+                .font(theme.chatFont.thread.secondary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+               
         }
-        .overlay {
-            if isSelected {
-                RoundedRectangle(cornerSize: .init(width: 10, height: 10))
-                    .stroke(Color.red, lineWidth: 2)
-            }
-        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerSize: .init(width: 10, height: 10))
+                .fill(backgroundColor)
+        )
+    }
+    
+    var primaryColor: Color {
+        let thread = theme.chatColor.thread
+        return isSelected ? thread.selected.primaryText : thread.unSelected.primaryText
+    }
+    
+    var secondaryColor: Color {
+        let thread = theme.chatColor.thread
+        return isSelected ? thread.selected.secondaryText : thread.unSelected.secondaryText
+    }
+    
+    var infoColor: Color {
+        let thread = theme.chatColor.thread
+        return isSelected ? thread.selected.infoText : thread.unSelected.infoText
+    }
+    
+    var backgroundColor: Color {
+        let thread = theme.chatColor.thread
+        return isSelected ? thread.selected.background : thread.unSelected.background
     }
 }
 
@@ -115,9 +178,7 @@ struct ThreadCellViewModel: Identifiable {
     let primaryText: String
     let secondaryText: String
     let info: String
-    
 }
-
 
 extension ThreadCellViewModel {
     init(model: ThreadsDTO) {
@@ -125,22 +186,5 @@ extension ThreadCellViewModel {
         self.info = Date(timeIntervalSince1970: model.lastUpdatedAt).info
         self.primaryText = model.threadName
         self.secondaryText = model.lastMessageSneakPeak
-    }
-}
-
-private extension Date {
-    var info: String {
-        let dayDifference = Calendar.current.dateComponents([.day], from: self, to: Date())
-        if dayDifference.day == 0 {
-            let hourDifference = Calendar.current.dateComponents([.hour], from: self, to: Date())
-            if hourDifference.hour == 0 {
-                let minuteDifference = Calendar.current.dateComponents([.minute], from: self, to: Date())
-                return "\(minuteDifference.minute)m"
-            } else {
-                return "\(hourDifference)h"
-            }
-        } else {
-            return "\(dayDifference)d"
-        }
     }
 }

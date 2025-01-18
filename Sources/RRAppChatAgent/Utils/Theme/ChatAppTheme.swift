@@ -17,9 +17,12 @@ enum ChatTheme: String, CaseIterable, Decodable {
     case linkedIn
 }
 
-struct AppTheme: Decodable, Theme {
-    let font: ThemeFont
-    let color: ThemeColor
+struct ChatAppTheme: Decodable, Theme {
+    var font: ThemeFont { return chatFont }
+    var color: ThemeColor { return chatColor }
+    
+    let chatFont: ChatAppThemeFont
+    let chatColor: ChatAppThemeColor
     let type: ChatTheme
     
     enum CodingKeys: String, CodingKey {
@@ -31,7 +34,7 @@ struct AppTheme: Decodable, Theme {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try container.decode(ChatTheme.self, forKey: .type)
-        self.font = try container.decode(AppThemeFont.self, forKey: .font)
-        self.color = try container.decode(AppThemeColor.self, forKey: .color)
+        self.chatFont = try container.decode(ChatAppThemeFont.self, forKey: .font)
+        self.chatColor = try container.decode(ChatAppThemeColor.self, forKey: .color)
     }
 }
