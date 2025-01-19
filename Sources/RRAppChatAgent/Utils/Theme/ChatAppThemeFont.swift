@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import RRAppTheme
 
+// MARK: - ChatAppThemeFont
 struct ChatAppThemeFont: Decodable, ThemeFont {
     let headline: Font
     let body: Font
@@ -72,6 +73,7 @@ extension Font: @retroactive Decodable {
     }
 }
 
+// MARK: - FontDecodable
 struct FontDecodable: Decodable {
     let type: String
     let size: CGFloat

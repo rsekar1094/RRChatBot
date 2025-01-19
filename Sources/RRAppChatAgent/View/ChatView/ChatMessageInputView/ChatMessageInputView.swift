@@ -10,6 +10,7 @@ import SwiftUI
 import RRAppTheme
 import RRAppUtils
 
+// MARK: - ChatMessageInputViewModel
 class ChatMessageInputViewModel: ObservableObject {
     @Published var message: String = ""
     @Published var isReadyToSend: Bool = true
@@ -17,21 +18,20 @@ class ChatMessageInputViewModel: ObservableObject {
     var isValid: Bool { !message.isEmpty }
 }
 
+// MARK: - ChatMessageInputView
 struct ChatMessageInputView: View {
     
     @EnvironmentObject
     var themeManager: ThemeManager
-    
-    var theme: ChatAppTheme { return themeManager.current }
    
     @ObservedObject
     var viewModel: ChatMessageInputViewModel
     
     let sendCompletion: (() -> Void)
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         HStack {
-            
             TextField(text: $viewModel.message) {
                 Text("Ask something...")
                     .font(theme.chatFont.chat.messageInput.placeholder)
@@ -50,10 +50,10 @@ struct ChatMessageInputView: View {
                         .resizable()
                         .frame(width: 25, height: 25)
                         .foregroundStyle(theme.color.primary)
-                        .padding()
                 }
             )
             .opacity(viewModel.isValid ? 1 : 0.2)
+            .padding(.trailing)
            
         }
         .background(theme.chatColor.chat.textInput.background)

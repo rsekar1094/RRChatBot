@@ -11,6 +11,7 @@ import RRAppNetwork
 import Combine
 import os
 
+// MARK: - ChatViewModel
 @MainActor
 public class ChatViewModel: ObservableObject {
     
@@ -72,22 +73,26 @@ public class ChatViewModel: ObservableObject {
     }
 }
 
+// MARK: - ChatViewModel + Messages
 public extension ChatViewModel {
     func fetchAllInitialMessages() async {
         guard let threadId = containerData?.threadId else { return }
+        self.messages = []
         self.viewState = .fetching
         
         do {
             let allMessages = try await chatRepository.fetchAllMessage(from: threadId)
+            self.viewState = .idle
             self.messages = allMessages.map { .init(message: $0) }
         } catch let error {
             logger.error("\(error)")
+            self.viewState = .idle
         }
     }
     
     func sendMessage() async {
         guard let container = containerData,
-                messageInput.isValid else { return }
+              messageInput.isValid else { return }
         
         let message = messageInput.message
         self.messages.append(
@@ -99,7 +104,7 @@ public extension ChatViewModel {
             )
         )
         messageInput.message = ""
-    
+        
         self.appendMessageLoaderIfNot("Processing")
         
         do {
@@ -140,6 +145,10 @@ public extension ChatViewModel {
             self.messages.remove(at: index)
         }
     }
+}
+
+// MARK: - ChatViewModel + Listen
+extension ChatViewModel {
     
     func listenForRun(data: ChatEventData) {
         print("event \(data.event.rawValue) \(data.meta)===========\n\n")
@@ -210,9 +219,9 @@ public extension ChatViewModel {
             break
         }
     }
-    
 }
 
+// MARK: - ChatViewModel + Data
 public extension ChatViewModel {
     struct Input {
         let containerData: ChatContainerData?
@@ -233,6 +242,7 @@ public extension ChatViewModel {
     }
 }
 
+// MARK: - ChatViewModel + ViewState
 extension ChatViewModel {
     enum ViewState {
         case idle
@@ -241,6 +251,7 @@ extension ChatViewModel {
     }
 }
 
+// MARK: - ChatViewModel + DTO
 extension ChatMessageViewModel {
     init(message: MessageDTO) {
         let userType: ChatMessageViewModel.UserType

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+// MARK: - AssistantDTO
 struct AssistantDTO {
     let id: String
     let name: String

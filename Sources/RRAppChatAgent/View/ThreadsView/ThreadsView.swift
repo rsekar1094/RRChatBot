@@ -21,21 +21,33 @@ struct ThreadsView: View {
     var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
-        ScrollView {
-            VStack {
-                ForEach(viewModel.threads) { thread in
-                    ThreadCellView(
-                        viewModel: thread,
-                        isSelected: viewModel.selectedThreadId == thread.id
-                    )
-                    .padding(.horizontal, 16)
-                    .onTapGesture {
-                        viewModel.didSelectedThread(id: thread.id)
+        VStack {
+            if viewModel.threads.isEmpty {
+                EmptyStateView(
+                    viewModel: .init(
+                        imageName: "figure.snowboarding",
+                        title: "No Threads",
+                        message: "Create your first thread by clicking the plus button in the top right corner.")
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            } else {
+                ScrollView {
+                    VStack {
+                        ForEach(viewModel.threads) { thread in
+                            ThreadCellView(
+                                viewModel: thread,
+                                isSelected: viewModel.selectedThreadId == thread.id
+                            )
+                            .padding(.horizontal, 16)
+                            .onTapGesture {
+                                viewModel.didSelectedThread(id: thread.id)
+                            }
+                        }
                     }
                 }
-                
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .background(theme.chatColor.thread.unSelected.background)
         .navigationTitle("Threads")
         .toolbar {
@@ -47,7 +59,6 @@ struct ThreadsView: View {
                         Image(systemName: "plus")
                     }
                 )
-                .foregroundStyle(theme.color.primary)
             }
         }
     }
@@ -114,81 +125,4 @@ class ThreadsViewModel: ObservableObject {
         selectedThreadId = id
     }
     
-}
-
-
-struct ThreadCellView: View {
-    
-    let viewModel: ThreadCellViewModel
-    
-    let isSelected: Bool
-    
-    @EnvironmentObject
-    var themeManager: ThemeManager
-
-    var theme: ChatAppTheme { return themeManager.current }
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            HStack(spacing: 4) {
-                Text(viewModel.primaryText)
-                    .lineLimit(1)
-                    .foregroundStyle(primaryColor)
-                    .font(theme.chatFont.thread.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                Text(viewModel.info)
-                    .foregroundStyle(infoColor)
-                    .font(theme.chatFont.thread.info)
-            }
-            
-            Text(viewModel.secondaryText)
-                .foregroundStyle(secondaryColor)
-                .font(theme.chatFont.thread.secondary)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-               
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerSize: .init(width: 10, height: 10))
-                .fill(backgroundColor)
-        )
-    }
-    
-    var primaryColor: Color {
-        let thread = theme.chatColor.thread
-        return isSelected ? thread.selected.primaryText : thread.unSelected.primaryText
-    }
-    
-    var secondaryColor: Color {
-        let thread = theme.chatColor.thread
-        return isSelected ? thread.selected.secondaryText : thread.unSelected.secondaryText
-    }
-    
-    var infoColor: Color {
-        let thread = theme.chatColor.thread
-        return isSelected ? thread.selected.infoText : thread.unSelected.infoText
-    }
-    
-    var backgroundColor: Color {
-        let thread = theme.chatColor.thread
-        return isSelected ? thread.selected.background : thread.unSelected.background
-    }
-}
-
-struct ThreadCellViewModel: Identifiable {
-    let id: String
-    let primaryText: String
-    let secondaryText: String
-    let info: String
-}
-
-extension ThreadCellViewModel {
-    init(model: ThreadsDTO) {
-        self.id = model.threadId
-        self.info = Date(timeIntervalSince1970: model.lastUpdatedAt).info
-        self.primaryText = model.threadName
-        self.secondaryText = model.lastMessageSneakPeak
-    }
 }

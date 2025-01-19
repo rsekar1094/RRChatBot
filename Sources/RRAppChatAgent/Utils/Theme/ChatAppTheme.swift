@@ -9,6 +9,7 @@ import Foundation
 import RRAppTheme
 import SwiftUI
 
+// MARK: - ChatTheme
 enum ChatTheme: String, CaseIterable, Identifiable, Decodable {
     case whatsapp
     case instagram
@@ -19,6 +20,7 @@ enum ChatTheme: String, CaseIterable, Identifiable, Decodable {
     var id: String { rawValue }
 }
 
+// MARK: - ChatAppTheme
 struct ChatAppTheme: Decodable, Theme {
     var font: ThemeFont { return chatFont }
     var color: ThemeColor { return chatColor }

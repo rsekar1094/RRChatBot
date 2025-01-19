@@ -11,6 +11,7 @@ import RRAppTheme
 import RRAppUtils
 import SwiftUI
 
+// MARK: - ChatView
 struct ChatView: View {
     
     @ObservedObject
@@ -25,8 +26,42 @@ struct ChatView: View {
     var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
+        #if os(watchOS)
+        if #available(watchOS 11.0, *) {
+            contentView
+                .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+        } else {
+            contentView
+        }
+        #else
+        if #available(iOS 18.0, *) {
+            contentView
+                .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+        } else {
+            contentView
+        }
+        #endif
+        
+    }
+    
+    var contentView: some View {
         VStack(spacing: 0) {
-            messageListView
+            if viewModel.viewState == .fetching {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            }
+            
+            if viewModel.viewState != .fetching && viewModel.messages.isEmpty {
+                EmptyStateView(
+                    viewModel: .init(
+                        imageName: "sailboat",
+                        title: "No Messages",
+                        message: "Start your conversation by typing a message.")
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            } else {
+                messageListView
+            }
             
             ChatMessageInputView(viewModel: viewModel.messageInput) {
                 Task {
@@ -57,7 +92,6 @@ struct ChatView: View {
                         Image(systemName: "gear.circle")
                     }
                 )
-                .foregroundStyle(theme.color.primary)
             }
         }
         .task(id: viewModel.containerData?.threadId) {

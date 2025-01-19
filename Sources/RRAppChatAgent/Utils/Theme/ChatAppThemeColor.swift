@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import RRAppTheme
 
+// MARK: - ChatAppThemeColor
 struct ChatAppThemeColor: Decodable, ThemeColor {
     let primary: Color
     let secondary: Color
