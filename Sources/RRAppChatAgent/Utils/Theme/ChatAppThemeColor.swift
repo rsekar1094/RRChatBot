@@ -92,6 +92,12 @@ extension Color: @retroactive Decodable {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let light = try container.decode(String.self, forKey: .light)
             let dark = try container.decode(String.self, forKey: .dark)
+            
+#if os(watchOS)
+            self = Color(
+                uiColor: UIColor(hex: dark)
+            )
+#else
             self = Color(
                 uiColor: UIColor(
                     dynamicProvider: { trait in
@@ -103,6 +109,8 @@ extension Color: @retroactive Decodable {
                     }
                 )
             )
+#endif
         }
     }
 }
+

@@ -62,36 +62,69 @@ public struct HomeView: View {
     @State
     var splitViewVisibiluty: NavigationSplitViewVisibility = .all
     
+    @Environment(\.horizontalSizeClass)
+    var horizontalSizeClass
+    
     @State
     var leftSafeAreaWidth: CGFloat = 30
     
-    @Inject
-    var theme: ChatAppTheme
+    @State
+    var navigationPath: NavigationPath = .init()
+    
+    @StateObject
+    private var themeManager = ThemeManager()
     
     public init() {}
     
     public var body: some View {
-        NavigationSplitView(
-            columnVisibility: $splitViewVisibiluty,
-            sidebar: {
-                GeometryReader { proxy in
-                    AssistantsListView(viewModel: viewModel.assistantsViewModel)
-                        .onChange(of: proxy.safeAreaInsets.leading) { old, new in
-                            leftSafeAreaWidth = new
-                        }
-                }
-                .navigationSplitViewColumnWidth(150 + leftSafeAreaWidth)
-                .background(theme.chatColor.agent.unselected.background)
-            },
-            content: {
-                ThreadsView(viewModel: viewModel.threadsViewModel)
-                    .navigationSplitViewColumnWidth(250)
-            },
-            detail: {
-                ChatView(viewModel: viewModel.chatViewModel)
-            }
-        )
+        contentView
+        .tint(themeManager.current.color.primary)
         .navigationSplitViewStyle(.balanced)
+        .environmentObject(themeManager)
+    }
+    
+    @ViewBuilder
+    public var contentView: some View {
+        if horizontalSizeClass == .compact {
+            NavigationStack(path: $navigationPath) {
+                HStack(spacing: 0) {
+                    AssistantsListView(viewModel: viewModel.assistantsViewModel)
+                    
+                    ThreadsView(viewModel: viewModel.threadsViewModel)
+                }
+                .navigationTitle("Chat")
+                .navigationBarTitleDisplayMode(.inline)
+                .onReceive(viewModel.threadsViewModel.$selectedThreadId) { value in
+                    guard let value else { return }
+                    
+                    navigationPath.append(value)
+                }
+                .navigationDestination(for: String.self) { _ in
+                    ChatView(viewModel: viewModel.chatViewModel)
+                }
+            }
+        } else {
+            NavigationSplitView(
+                columnVisibility: $splitViewVisibiluty,
+                sidebar: {
+                    GeometryReader { proxy in
+                        AssistantsListView(viewModel: viewModel.assistantsViewModel)
+                            .onChange(of: proxy.safeAreaInsets.leading) { old, new in
+                                leftSafeAreaWidth = new
+                            }
+                    }
+                    .navigationSplitViewColumnWidth(150 + leftSafeAreaWidth)
+                    .background(themeManager.current.chatColor.agent.unselected.background)
+                },
+                content: {
+                    ThreadsView(viewModel: viewModel.threadsViewModel)
+                        .navigationSplitViewColumnWidth(250)
+                },
+                detail: {
+                    ChatView(viewModel: viewModel.chatViewModel)
+                }
+            )
+        }
     }
 }
 
@@ -99,11 +132,10 @@ struct AssistantsListView: View {
     @ObservedObject
     var viewModel: AssistantsListViewModel
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
     
-    @State
-    var showThemeSelectSheet: Bool = false
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         ScrollView {
@@ -120,30 +152,6 @@ struct AssistantsListView: View {
             }
         }
         .background(theme.chatColor.agent.unselected.background)
-        .sheet(isPresented: $showThemeSelectSheet) {
-            VStack {
-                ForEach(ChatTheme.allCases) { item in
-                    Text(item.rawValue.localizedCapitalized)
-                        .padding()
-                        .onTapGesture {
-                            RRAppChatAgent.loadTheme(type: item)
-                            showThemeSelectSheet = false
-                        }
-                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(
-                    action: {
-                        showThemeSelectSheet = true
-                    }, label: {
-                        Image(systemName: "gear.circle.fill")
-                    }
-                )
-                .foregroundStyle(theme.color.primary)
-            }
-        }
     }
 }
 
@@ -151,8 +159,10 @@ struct AssistantListCellView: View {
     let viewModel: AssistantListCellViewModel
     let isSelected: Bool
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
+    
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         if isSelected {
@@ -243,5 +253,35 @@ class AssistantsListViewModel: ObservableObject {
     
     func didSelectedAssistant(with id: String) {
         selectedAssistantId = id
+    }
+}
+
+import RRAppUtils
+
+class ThemeManager: ObservableObject {
+    @Published var current: ChatAppTheme
+
+    init(current: ChatAppTheme) {
+        self.current = current
+    }
+    
+    init() {
+        let selectedType = UserDefaults.standard.string(forKey: "theme") ?? ChatTheme.whatsapp.rawValue
+        guard let models: [ChatAppTheme] = try? JSONManager.fetchArrayData(fileName: "Theme", from: .module),
+              let model = models.first(where: { $0.type.rawValue == selectedType }) else {
+            fatalError()
+        }
+        
+        self.current = model
+    }
+    
+    func setCurrentTheme(to theme: ChatTheme) {
+        guard let models: [ChatAppTheme] = try? JSONManager.fetchArrayData(fileName: "Theme", from: .module),
+              let model = models.first(where: { $0.type == theme }) else {
+            fatalError()
+        }
+        
+        current = model
+        UserDefaults.standard.set(theme.rawValue, forKey: "theme")
     }
 }

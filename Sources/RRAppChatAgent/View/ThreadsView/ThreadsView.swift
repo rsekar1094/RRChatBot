@@ -15,8 +15,10 @@ struct ThreadsView: View {
     @ObservedObject
     var viewModel: ThreadsViewModel
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
+    
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         ScrollView {
@@ -121,8 +123,10 @@ struct ThreadCellView: View {
     
     let isSelected: Bool
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
+
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         VStack(spacing: 4) {

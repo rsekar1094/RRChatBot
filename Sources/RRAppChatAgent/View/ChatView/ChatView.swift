@@ -16,8 +16,13 @@ struct ChatView: View {
     @ObservedObject
     var viewModel: ChatViewModel
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
+    
+    @State
+    var showThemeSelectSheet: Bool = false
+    
+    var theme: ChatAppTheme { return themeManager.current }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -30,6 +35,31 @@ struct ChatView: View {
             }
         }
         .navigationTitle(viewModel.navigationTitle ?? "")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showThemeSelectSheet) {
+            VStack {
+                ForEach(ChatTheme.allCases) { item in
+                    Text(item.rawValue.localizedCapitalized)
+                        .padding()
+                        .onTapGesture {
+                            themeManager.setCurrentTheme(to: item)
+                            showThemeSelectSheet = false
+                        }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(
+                    action: {
+                        showThemeSelectSheet = true
+                    }, label: {
+                        Image(systemName: "gear.circle")
+                    }
+                )
+                .foregroundStyle(theme.color.primary)
+            }
+        }
         .task(id: viewModel.containerData?.threadId) {
             await viewModel.fetchAllInitialMessages()
         }

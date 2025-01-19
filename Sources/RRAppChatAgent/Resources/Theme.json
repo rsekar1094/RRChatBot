@@ -110,9 +110,18 @@
                         "light": "#DCF8C6",
                         "dark": "#075E54"
                     },
-                    "primaryText": "#2D2D2D",
-                    "secondaryText": "#606062",
-                    "infoText": "#797979"
+                    "primaryText": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText":{
+                        "light": "#606062",
+                        "dark": "#A0A0A0"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#C0C0C0"
+                    }
                 },
                 "unSelected": {
                     "background": {
@@ -262,9 +271,18 @@
                         "light": "#FDCB5A",
                         "dark": "#FF0066"
                     },
-                    "primaryText": "#2D2D2D",
-                    "secondaryText": "#606062",
-                    "infoText": "#797979"
+                    "primaryText": {
+                        "light": "#2D2D2D",
+                        "dark": "#FFFFFF"
+                    },
+                    "secondaryText":{
+                        "light": "#606062",
+                        "dark": "#A0A0A0"
+                    },
+                    "infoText": {
+                        "light": "#797979",
+                        "dark": "#C0C0C0"
+                    }
                 },
                 "unSelected": {
                     "background": {

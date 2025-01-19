@@ -11,10 +11,16 @@ import RRAppUtils
 
 struct ChatMessageView: View {
     
-    @Inject
-    var theme: ChatAppTheme
+    @EnvironmentObject
+    var themeManager: ThemeManager
+    
+    var theme: ChatAppTheme { return themeManager.current }
     
     let viewModel: ChatMessageViewModel
+    
+    init(viewModel: ChatMessageViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         switch viewModel.content {
